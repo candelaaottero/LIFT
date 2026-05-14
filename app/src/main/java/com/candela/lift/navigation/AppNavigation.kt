@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.candela.lift.pantallaBotonCrearRutina.ui.PantallaBotonCrearRutina
 import com.candela.lift.pantallaDescripcionRutina.ui.PantallaDescripcionRutina
 import com.candela.lift.pantallaInicio.ui.PantallaInicio
 import com.candela.lift.pantallaRutinas.ui.PantallaRutinas
@@ -22,6 +23,9 @@ fun AppNavigation() {
         }
         composable(route = AppScreens.PantallaDescripcionRutina.route) {
             PantallaDescripcionRutina(navController)
+        }
+        composable(route = AppScreens.PantallaBotonCrearRutina.route) {
+            PantallaBotonCrearRutina(navController)
         }
     }
 }

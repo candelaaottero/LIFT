@@ -2,7 +2,9 @@ package com.candela.lift.pantallaRutinas.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -76,30 +79,41 @@ fun PantallaRutinas(navController: NavController) {
                 },
                 scrollBehavior = scrollBehavior)
         },
-        bottomBar = { BottomBar(navController) }
-    ) {
-        BodyRutinas(navController)
-    }
+        bottomBar = { BottomBar(navController) },
+        content = { innerPadding ->
+            BodyRutinas(navController, innerPadding)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BodyRutinas(navController: NavController) {
+fun BodyRutinas(navController: NavController, paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFCBCBCB))
+            .padding(paddingValues)
+            .background(Color(0xFFDEDEDE))
     ) {
+        Spacer(modifier = Modifier.padding(16.dp))
         Text(
             text = "Mis Rutinas",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.padding(16.dp))
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
         ) {
             Button(
-                onClick = {}
+                onClick = {navController.navigate(AppScreens.PantallaBotonCrearRutina.route)},
+                colors = ButtonColors(
+                    containerColor = Color(0xFF3D5AFE),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xFF3D5AFE),
+                    disabledContentColor = Color(0xFF3D5AFE)
+                )
             ) {
                 Text(
                     text = "+ Nueva Rutina",

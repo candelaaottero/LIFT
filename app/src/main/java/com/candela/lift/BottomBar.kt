@@ -17,7 +17,7 @@ import com.candela.lift.navigation.AppScreens
 fun BottomBar(navController: NavController) {
     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
         NavigationBarItem(
-            selected = true,
+            selected = false,
             onClick = { navController.navigate(AppScreens.PantallaInicio.route) },
             icon = {Icon(Icons.Default.Home, null)},
             label = { Text(text = "Inicio") }
