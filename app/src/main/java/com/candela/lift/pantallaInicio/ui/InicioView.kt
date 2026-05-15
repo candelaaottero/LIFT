@@ -93,7 +93,8 @@ fun BodyInicio(navController: NavController, paddingValues: PaddingValues) {
         Text(
             text = "Mis Entrenamientos",
             fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 10.dp)
         )
     }
 }

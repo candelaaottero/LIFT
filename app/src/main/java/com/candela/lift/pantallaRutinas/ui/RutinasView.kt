@@ -77,7 +77,8 @@ fun PantallaRutinas(navController: NavController) {
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior)
+                scrollBehavior = scrollBehavior
+            )
         },
         bottomBar = { BottomBar(navController) },
         content = { innerPadding ->
@@ -99,7 +100,8 @@ fun BodyRutinas(navController: NavController, paddingValues: PaddingValues) {
         Text(
             text = "Mis Rutinas",
             fontSize = 30.sp,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 10.dp))
         Spacer(modifier = Modifier.padding(16.dp))
         Row(
             modifier = Modifier
