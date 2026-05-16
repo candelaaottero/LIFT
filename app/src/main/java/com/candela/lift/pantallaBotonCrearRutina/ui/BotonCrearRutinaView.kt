@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -84,7 +86,7 @@ fun PantallaBotonCrearRutina(navController: NavController) {
 fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingValues) {
     var textNombreRutina by rememberSaveable { mutableStateOf("") }
     var textNombreEjercicio by rememberSaveable { mutableStateOf("") }
-    var tarjetaVisible by remember { mutableStateOf(false) }
+    var tarjetas by remember { mutableStateOf(listOf<String>())}
 
     Column(
         modifier = Modifier
@@ -100,7 +102,10 @@ fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingVal
             modifier = Modifier.fillMaxWidth().padding(10.dp)
         )
         Button(
-            onClick = {tarjetaVisible != tarjetaVisible},
+            onClick = {
+                val nuevaTarjeta = "${tarjetas.size + 1}"
+                tarjetas = tarjetas + nuevaTarjeta
+            },
             colors = ButtonColors(
                 containerColor = Color(0xFF3D5AFE),
                 contentColor = Color.White,
@@ -118,50 +123,8 @@ fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingVal
                     .background(color = Color(0xFF3D5AFE))
             )
         }
-
-        if (tarjetaVisible) {
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        TextField(
-                            value = textNombreEjercicio,
-                            onValueChange = {textNombreEjercicio = it},
-                            label = { Text(text = "Nombre Ejercicio") },
-                            modifier = Modifier.padding(10.dp)
-                        )
-                        IconButton(onClick = {}) {
-                            Icon(
-                                imageVector = Icons.Filled.MoreVert,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                    Button(
-                        onClick = {},
-                        colors = ButtonColors(
-                            containerColor = Color(0xFF8F8E8E),
-                            contentColor = Color.White,
-                            disabledContainerColor = Color(0xFF8F8E8E),
-                            disabledContentColor = Color(0xFF8F8E8E)
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ) {
-                        Text(
-                            text = "+ Agregar Serie",
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp, vertical = 5.dp)
-                                .background(color = Color(0xFF8F8E8E))
-                        )
-                    }
-                }
-            }
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(tarjetas) { textoTarjeta -> CardRutina() }
         }
     }
 }
