@@ -42,20 +42,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.candela.lift.CardRutina
+import com.candela.lift.CardEjercicio
+import com.candela.lift.navigation.AppScreens
+import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaBotonCrearRutina(navController: NavController) {
+fun PantallaBotonCrearRutina(navController: NavController, viewModel: RutinasViewModel, onRutinaAgregada: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    var nombreRutina by remember { mutableStateOf("") }
+
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Crear Rutina",
-
+                        text = "Crear Rutina"
                         )
                 },
                 navigationIcon = {
@@ -67,25 +70,41 @@ fun PantallaBotonCrearRutina(navController: NavController) {
                     }
                 },
                 actions = {
-                    Text(
-                        text = "Guardar",
-                        modifier = Modifier.padding(end = 10.dp),
-                        color = Color(0xFF3D5AFE)
-                    )
+                    Button(
+                        onClick = {
+                            if (nombreRutina.isNotBlank()) {
+                                viewModel.agregarRutina(nombreRutina)
+                                onRutinaAgregada()
+                            }
+                        },
+                        colors = ButtonColors(
+                            containerColor = Color(0xFF3D5AFE),
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFF3D5AFE),
+                            disabledContentColor = Color(0xFF3D5AFE)
+                        )
+                    ) {
+                        Text(
+                            text = "Guardar",
+                            color = Color.White
+                        )
+                    }
                 },
                 scrollBehavior = scrollBehavior
             )
         },
         content = { innerPadding ->
-            BodyBotonCrearRutina(navController, innerPadding)
+            BodyBotonCrearRutina(
+                navController, innerPadding,
+                nombreRutina = nombreRutina,
+                onNombreRutinaChange = { nombreRutina = it }
+            )
         }
     )
 }
 
 @Composable
-fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingValues) {
-    var textNombreRutina by rememberSaveable { mutableStateOf("") }
-    var textNombreEjercicio by rememberSaveable { mutableStateOf("") }
+fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingValues, nombreRutina: String, onNombreRutinaChange: (String) -> Unit) {
     var tarjetas by remember { mutableStateOf(listOf<String>())}
 
     Column(
@@ -96,10 +115,12 @@ fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingVal
     ) {
         Spacer(modifier = Modifier.padding(10.dp))
         TextField(
-            value = textNombreRutina,
-            onValueChange = {textNombreRutina = it},
+            value = nombreRutina,
+            onValueChange = onNombreRutinaChange,
             label = { Text(text = "Nombre Rutina") },
-            modifier = Modifier.fillMaxWidth().padding(10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
         )
         Button(
             onClick = {
@@ -124,7 +145,7 @@ fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingVal
             )
         }
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(tarjetas) { textoTarjeta -> CardRutina() }
+            items(tarjetas) { textoTarjeta -> CardEjercicio() }
         }
     }
 }

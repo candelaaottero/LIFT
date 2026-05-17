@@ -1,5 +1,7 @@
 package com.candela.lift.navigation
 
+import kotlinx.serialization.Serializable
+
 sealed class AppScreens (val route: String) {
     object PantallaInicio: AppScreens("pantalla_inicio")
     object PantallaRutinas: AppScreens("pantalla_rutinas")
