@@ -1,8 +1,9 @@
 package com.candela.lift.data
 
 data class SerieData (
-    val serie: Int,
-    var kg: String = "",
-    var reps: String = "",
+    val id: String,
+    val numeroSerie: Int,
+    var kg: String = "0",
+    var reps: String = "0",
     var checked: Boolean = false
 )

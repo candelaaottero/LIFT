@@ -73,7 +73,13 @@ fun CardCrearEjercicio() {
             HorizontalDivider(thickness = 2.dp)
             Button(
                 onClick = {
-                    val nuevaSerie = SerieData(serie = series.size + 1)
+                    val nuevaSerie = SerieData(
+                        id = java.util.UUID.randomUUID().toString(),
+                        numeroSerie = series.size + 1,
+                        kg = "0",
+                        reps = "0",
+                        checked = false
+                    )
                     series = series + nuevaSerie
                 },
                 colors = ButtonColors(
@@ -114,7 +120,7 @@ fun CardCrearEjercicio() {
                     ) {
                         Spacer(modifier = Modifier.padding(5.dp))
                         TextField(
-                            value = textoSeries.serie.toString(),
+                            value = textoSeries.numeroSerie.toString(),
                             onValueChange = {},
                             readOnly = true,
                             modifier = Modifier.width(40.dp)
@@ -125,7 +131,7 @@ fun CardCrearEjercicio() {
                             onValueChange = { nuevoValor ->
                                 if (nuevoValor.all { it.isDigit() }) {
                                     series = series.map {
-                                        if (it.serie == textoSeries.serie)
+                                        if (it.numeroSerie == textoSeries.numeroSerie)
                                             it.copy(kg = nuevoValor)
                                         else it
                                     }
@@ -140,7 +146,7 @@ fun CardCrearEjercicio() {
                             onValueChange = { nuevoValor ->
                                 if (nuevoValor.all { it.isDigit() }) {
                                     series = series.map {
-                                        if (it.serie == textoSeries.serie)
+                                        if (it.numeroSerie == textoSeries.numeroSerie)
                                             it.copy(reps = nuevoValor)
                                         else it
                                     }
@@ -153,7 +159,7 @@ fun CardCrearEjercicio() {
                             checked = textoSeries.checked,
                             onCheckedChange = { nuevoChecked ->
                                 series = series.map {
-                                    if (it.serie == textoSeries.serie)
+                                    if (it.numeroSerie == textoSeries.numeroSerie)
                                         it.copy(checked = nuevoChecked)
                                     else it
                                 }

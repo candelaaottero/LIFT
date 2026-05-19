@@ -8,7 +8,8 @@ import java.util.UUID
 
 data class EjercicioData(
     val id: String,
-    val nombre: String
+    val nombre: String,
+    val series: List<SerieData> = emptyList()
 )
 
 class DescripcionRutinaViewModel : ViewModel() {

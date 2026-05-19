@@ -119,7 +119,6 @@ fun BodyBotonCrearRutina(
     onNombreRutinaChange: (String) -> Unit,
     tarjetas : List<String>,
     onTarjetasChange: (List<String>) -> Unit) {
-    var tarjetas by remember { mutableStateOf(listOf<String>())}
 
     Column(
         modifier = Modifier
@@ -138,8 +137,8 @@ fun BodyBotonCrearRutina(
         )
         Button(
             onClick = {
-                val nuevaTarjeta = "${tarjetas.size + 1}"
-                tarjetas = tarjetas + nuevaTarjeta
+                val nuevaTarjeta = "Ejercicio ${tarjetas.size + 1}"
+                onTarjetasChange(tarjetas + nuevaTarjeta)
             },
             colors = ButtonColors(
                 containerColor = Color(0xFF3D5AFE),

@@ -2,6 +2,7 @@ package com.candela.lift.pantallaDescripcionRutina.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.navigation.NavController
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import com.candela.lift.CardEjercicioGuardado
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
@@ -37,15 +39,16 @@ import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PantallaDescripcionRutina(navController: NavController, rutinaId: String) {
+fun PantallaDescripcionRutina(navController: NavController, viewModel: RutinasViewModel) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val rutina = viewModel.rutinaSeleccionada
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Rutinas",
+                        text = rutina?.nombreRutina ?: "Detalle",
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
@@ -68,45 +71,37 @@ fun PantallaDescripcionRutina(navController: NavController, rutinaId: String) {
                 colors = TopAppBarDefaults.topAppBarColors(Color.White),
                 scrollBehavior = scrollBehavior
             )
-        },
-        content = { innerPadding ->
-            BodyDescripcionRutina(
-                navController, innerPadding,
-                rutinaId = rutinaId
-            )
         }
-    )
-}
-
-@Composable
-fun BodyDescripcionRutina(
-    navController: NavController, paddingValues: PaddingValues,
-    rutinaId: String, viewModel: RutinasViewModel = viewModel()
-) {
-    val rutina = viewModel.rutinaSeleccionada
-
-    if (rutina == null) {
-        Text("Rutina no encontrada")
-        return
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .background(Color(0xFFDEDEDE))
-    ) {
-        // Recorremos los ejercicios específicos de ESTA rutina
-        items(rutina.ejercicios) { ejercicio ->
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) { innerPadding ->
+        if (rutina != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
-                Text(
-                    text = ejercicio.nombre,
-                    modifier = Modifier.padding(16.dp),
-                    fontSize = 16.sp
-                )
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3D5AFE)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = "Comenzar Rutina",
+                        fontSize = 18.sp,
+                        color = Color.White
+                        )
+                }
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(rutina.ejercicios) { ejercicio ->
+                        CardEjercicioGuardado(ejercicio = ejercicio, viewModel = viewModel)
+                    }
+                }
             }
         }
     }
