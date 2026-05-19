@@ -37,14 +37,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.candela.lift.data.EjercicioData
 import com.candela.lift.data.SerieData
-import com.candela.lift.pantallaDescripcionRutina.ui.EjercicioData
 
 // tarjeta que se muestra al agregar un nuevo ejercicio al crear una rutina en la pantalla BotonCrearRutina
 @Composable
-fun CardCrearEjercicio() {
-    var nombreEjercicio by rememberSaveable { mutableStateOf("") }
-    var series by rememberSaveable { mutableStateOf(listOf<SerieData>()) }
+fun CardCrearEjercicio(
+    ejercicio: EjercicioData,
+    onEjercicioChange: (EjercicioData) -> Unit
+) {
+    val series = ejercicio.series
 
     Card(
         modifier = Modifier
@@ -58,8 +60,10 @@ fun CardCrearEjercicio() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedTextField(
-                    value = nombreEjercicio,
-                    onValueChange = { nombreEjercicio = it },
+                    value = ejercicio.nombre,
+                    onValueChange = { nuevoNombre ->
+                        onEjercicioChange(ejercicio.copy(nombre = nuevoNombre))
+                    },
                     label = { Text(text = "Nombre Ejercicio") },
                     modifier = Modifier.padding(10.dp)
                 )
@@ -76,11 +80,11 @@ fun CardCrearEjercicio() {
                     val nuevaSerie = SerieData(
                         id = java.util.UUID.randomUUID().toString(),
                         numeroSerie = series.size + 1,
-                        kg = "0",
-                        reps = "0",
+                        kg = "",
+                        reps = "",
                         checked = false
                     )
-                    series = series + nuevaSerie
+                    onEjercicioChange(ejercicio.copy(series = series + nuevaSerie))
                 },
                 colors = ButtonColors(
                     containerColor = Color(0xFF8F8E8E),
@@ -109,66 +113,55 @@ fun CardCrearEjercicio() {
                 Spacer(modifier = Modifier.padding(10.dp))
                 Text(text = "Repeticiones", fontWeight = FontWeight.Bold)
             }
-            LazyColumn(modifier = Modifier.padding(10.dp).height(150.dp)) {
-                item {
-                    Spacer(modifier = Modifier.padding(0.dp))
-                }
-                items(series) { textoSeries ->
+            Column(modifier = Modifier.padding(10.dp)) {
+                series.forEach { textoSeries ->
                     Row(
-                        modifier = Modifier.padding(10.dp, end = 10.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Spacer(modifier = Modifier.padding(5.dp))
                         TextField(
                             value = textoSeries.numeroSerie.toString(),
                             onValueChange = {},
                             readOnly = true,
-                            modifier = Modifier.width(40.dp)
+                            modifier = Modifier.width(50.dp)
                         )
-                        Spacer(modifier = Modifier.padding(5.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         TextField(
                             value = textoSeries.kg,
                             onValueChange = { nuevoValor ->
                                 if (nuevoValor.all { it.isDigit() }) {
-                                    series = series.map {
-                                        if (it.numeroSerie == textoSeries.numeroSerie)
-                                            it.copy(kg = nuevoValor)
-                                        else it
+                                    val seriesModificadas = series.map {
+                                        if (it.id == textoSeries.id) it.copy(kg = nuevoValor) else it
                                     }
+                                    onEjercicioChange(ejercicio.copy(series = seriesModificadas))
                                 }
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.width(70.dp)
                         )
-                        Spacer(modifier = Modifier.padding(5.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         TextField(
                             value = textoSeries.reps,
                             onValueChange = { nuevoValor ->
                                 if (nuevoValor.all { it.isDigit() }) {
-                                    series = series.map {
-                                        if (it.numeroSerie == textoSeries.numeroSerie)
-                                            it.copy(reps = nuevoValor)
-                                        else it
+                                    val seriesModificadas = series.map {
+                                        if (it.id == textoSeries.id) it.copy(reps = nuevoValor) else it
                                     }
+                                    onEjercicioChange(ejercicio.copy(series = seriesModificadas))
                                 }
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            modifier = Modifier.width(60.dp)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.width(70.dp)
                         )
                         Checkbox(
                             checked = textoSeries.checked,
                             onCheckedChange = { nuevoChecked ->
-                                series = series.map {
-                                    if (it.numeroSerie == textoSeries.numeroSerie)
-                                        it.copy(checked = nuevoChecked)
-                                    else it
+                                val seriesModificadas = series.map {
+                                    if (it.id == textoSeries.id) it.copy(checked = nuevoChecked) else it
                                 }
+                                onEjercicioChange(ejercicio.copy(series = seriesModificadas))
                             },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFF4CAF50),
-                                uncheckedColor = Color.Gray
-                            ),
-                            modifier = Modifier.padding(start = 60.dp)
+                            modifier = Modifier.padding(start = 16.dp)
                         )
                     }
                 }

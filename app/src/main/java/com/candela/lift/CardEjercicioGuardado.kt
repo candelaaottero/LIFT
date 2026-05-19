@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.candela.lift.pantallaDescripcionRutina.ui.EjercicioData
+import com.candela.lift.data.EjercicioData
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
 // tarjeta que se muestra en la pantalla DescripcionRutina

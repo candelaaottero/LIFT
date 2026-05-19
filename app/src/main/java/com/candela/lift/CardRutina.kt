@@ -15,8 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.candela.lift.data.RutinasData
 import com.candela.lift.navigation.AppScreens
-import com.candela.lift.pantallaRutinas.ui.RutinasData
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
 // tarjeta que se muestra en la pantallas de "Mis Rutinas"
