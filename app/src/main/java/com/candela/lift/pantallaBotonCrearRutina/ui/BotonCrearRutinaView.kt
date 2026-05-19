@@ -31,6 +31,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -42,8 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.candela.lift.CardEjercicio
+import com.candela.lift.CardCrearEjercicio
 import com.candela.lift.navigation.AppScreens
+import com.candela.lift.pantallaDescripcionRutina.ui.EjercicioData
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +53,7 @@ import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 fun PantallaBotonCrearRutina(navController: NavController, viewModel: RutinasViewModel, onRutinaAgregada: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var nombreRutina by remember { mutableStateOf("") }
-
+    var tarjetas by remember { mutableStateOf(listOf<String>()) }
 
     Scaffold(
         topBar = {
@@ -73,8 +75,12 @@ fun PantallaBotonCrearRutina(navController: NavController, viewModel: RutinasVie
                     Button(
                         onClick = {
                             if (nombreRutina.isNotBlank()) {
-                                viewModel.agregarRutina(nombreRutina)
+                                viewModel.agregarRutina(
+                                    nombreRutina,
+                                    tarjetas
+                                )
                                 onRutinaAgregada()
+
                             }
                         },
                         colors = ButtonColors(
@@ -97,14 +103,22 @@ fun PantallaBotonCrearRutina(navController: NavController, viewModel: RutinasVie
             BodyBotonCrearRutina(
                 navController, innerPadding,
                 nombreRutina = nombreRutina,
-                onNombreRutinaChange = { nombreRutina = it }
+                onNombreRutinaChange = { nombreRutina = it },
+                tarjetas = tarjetas,
+                onTarjetasChange = { tarjetas = it }
             )
         }
     )
 }
 
 @Composable
-fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingValues, nombreRutina: String, onNombreRutinaChange: (String) -> Unit) {
+fun BodyBotonCrearRutina(
+    navController: NavController,
+    paddingValues: PaddingValues,
+    nombreRutina: String,
+    onNombreRutinaChange: (String) -> Unit,
+    tarjetas : List<String>,
+    onTarjetasChange: (List<String>) -> Unit) {
     var tarjetas by remember { mutableStateOf(listOf<String>())}
 
     Column(
@@ -145,7 +159,7 @@ fun BodyBotonCrearRutina(navController: NavController, paddingValues: PaddingVal
             )
         }
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(tarjetas) { textoTarjeta -> CardEjercicio() }
+            items(tarjetas) { textoTarjeta -> CardCrearEjercicio() }
         }
     }
 }

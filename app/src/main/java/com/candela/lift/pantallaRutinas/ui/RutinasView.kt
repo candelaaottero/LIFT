@@ -124,7 +124,11 @@ fun BodyRutinas(navController: NavController, paddingValues: PaddingValues, view
             modifier = Modifier.fillMaxSize().padding(10.dp)
         ) {
             items(listaRutinas, key = {it.id}) { tarjeta ->
-                CardRutina(tarjeta)
+                CardRutina(
+                    tarjeta,
+                    navController = navController,
+                    viewModel = viewModel
+                )
             }
         }
     }

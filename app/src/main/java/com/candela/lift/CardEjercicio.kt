@@ -36,10 +36,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.candela.lift.data.SerieData
+import com.candela.lift.pantallaDescripcionRutina.ui.EjercicioData
 
+// tarjeta que se muestra al agregar un nuevo ejercicio al crear una rutina en la pantalla BotonCrearRutina
 @Composable
-fun CardEjercicio() {
+fun CardCrearEjercicio() {
     var nombreEjercicio by rememberSaveable { mutableStateOf("") }
     var series by rememberSaveable { mutableStateOf(listOf<SerieData>()) }
 

@@ -2,42 +2,42 @@ package com.candela.lift.pantallaDescripcionRutina.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.candela.lift.pantallaInicio.ui.BodyInicio
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CardDefaults
+import com.candela.lift.CardEjercicioGuardado
+import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PantallaDescripcionRutina(navController: NavController) {
+fun PantallaDescripcionRutina(navController: NavController, rutinaId: String) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -70,18 +70,44 @@ fun PantallaDescripcionRutina(navController: NavController) {
             )
         },
         content = { innerPadding ->
-            BodyDescripcionRutina(navController, innerPadding)
+            BodyDescripcionRutina(
+                navController, innerPadding,
+                rutinaId = rutinaId
+            )
         }
     )
 }
 
 @Composable
-fun BodyDescripcionRutina(navController: NavController, paddingValues: PaddingValues) {
-    Column(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFC4C4C4)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+fun BodyDescripcionRutina(
+    navController: NavController, paddingValues: PaddingValues,
+    rutinaId: String, viewModel: RutinasViewModel = viewModel()
+) {
+    val rutina = viewModel.rutinaSeleccionada
+
+    if (rutina == null) {
+        Text("Rutina no encontrada")
+        return
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .background(Color(0xFFDEDEDE))
     ) {
-        Text(text = "Hola")
+        // Recorremos los ejercicios específicos de ESTA rutina
+        items(rutina.ejercicios) { ejercicio ->
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Text(
+                    text = ejercicio.nombre,
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 16.sp
+                )
+            }
+        }
     }
 }

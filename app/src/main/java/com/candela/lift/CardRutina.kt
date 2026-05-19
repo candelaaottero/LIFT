@@ -14,12 +14,20 @@ import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.candela.lift.navigation.AppScreens
 import com.candela.lift.pantallaRutinas.ui.RutinasData
+import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
+// tarjeta que se muestra en la pantallas de "Mis Rutinas"
 @Composable
-fun CardRutina(tarjeta: RutinasData) {
+fun CardRutina(tarjeta: RutinasData, navController: NavController, viewModel: RutinasViewModel) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+        onClick = {
+            viewModel.rutinaSeleccionada = tarjeta
+            navController.navigate("pantalla_descripcion_rutina/${tarjeta.id}")
+        }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -27,6 +35,11 @@ fun CardRutina(tarjeta: RutinasData) {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
+            )
+            Text(
+                text = "${tarjeta.ejercicios.size} Ejercicios",
+                fontSize = 14.sp,
+                color = Color.Gray
             )
         }
     }

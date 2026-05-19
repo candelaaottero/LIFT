@@ -30,8 +30,9 @@ fun AppNavigation() {
         composable(route = AppScreens.PantallaRutinas.route) {
             PantallaRutinas(navController, viewModel = compartidoViewModel)
         }
-        composable(route = AppScreens.PantallaDescripcionRutina.route) {
-            PantallaDescripcionRutina(navController)
+        composable(route = AppScreens.PantallaDescripcionRutina.route) { backStackEntry ->
+            val rutinaId = backStackEntry.arguments?.getString("rutinaId") ?: ""
+            PantallaDescripcionRutina(navController = navController, rutinaId = rutinaId)
         }
         composable(route = AppScreens.PantallaBotonCrearRutina.route) {
             PantallaBotonCrearRutina(
