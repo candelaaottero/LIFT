@@ -70,6 +70,7 @@ fun CardEjercicioGuardado(ejercicio: EjercicioData, viewModel: RutinasViewModel)
 
                     Checkbox(
                         checked = serie.checked,
+                        enabled = viewModel.entrenamientoActivo,
                         onCheckedChange = {isChecked ->
                             viewModel.cambiarEstadoSerie(
                                 ejercicioId = ejercicio.id,

@@ -1,6 +1,8 @@
 package com.candela.lift.pantallaDescripcionRutina.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,14 +36,17 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import com.candela.lift.CardEjercicioGuardado
+import com.candela.lift.navigation.AppScreens
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PantallaDescripcionRutina(navController: NavController, viewModel: RutinasViewModel) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val rutina = viewModel.rutinaSeleccionada
+    val estaEntrenando = viewModel.entrenamientoActivo
 
     Scaffold(
         topBar = {
@@ -53,7 +58,10 @@ fun PantallaDescripcionRutina(navController: NavController, viewModel: RutinasVi
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {navController.popBackStack()}) {
+                    IconButton(onClick = {
+                        viewModel.entrenamientoActivo = false
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Arrow back"
@@ -79,18 +87,37 @@ fun PantallaDescripcionRutina(navController: NavController, viewModel: RutinasVi
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                Button(
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3D5AFE)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "Comenzar Rutina",
-                        fontSize = 18.sp,
-                        color = Color.White
+                if (!estaEntrenando) {
+                    Button(
+                        onClick = {viewModel.entrenamientoActivo = true},
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3D5AFE)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Comenzar Rutina",
+                            fontSize = 18.sp,
+                            color = Color.White
                         )
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            viewModel.finalizarEntrenamientoActual()
+                            navController.popBackStack()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Finalizar Rutina",
+                            fontSize = 18.sp,
+                            color = Color.White
+                        )
+                    }
                 }
 
                 LazyColumn(

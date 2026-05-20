@@ -1,12 +1,9 @@
 package com.candela.lift.navigation
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import androidx.activity.compose.LocalActivity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +14,7 @@ import com.candela.lift.pantallaRutinas.ui.PantallaRutinas
 import com.candela.lift.pantallaRutinas.ui.RutinasViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation() {
@@ -25,7 +23,7 @@ fun AppNavigation() {
 
     NavHost(navController = navController, startDestination = AppScreens.PantallaInicio.route){
         composable(route = AppScreens.PantallaInicio.route) {
-            PantallaInicio(navController)
+            PantallaInicio(navController, viewModel = compartidoViewModel)
         }
         composable(route = AppScreens.PantallaRutinas.route) {
             PantallaRutinas(navController, viewModel = compartidoViewModel)
